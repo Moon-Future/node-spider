@@ -1,7 +1,7 @@
-const request = require('request')
-const superagent = require('superagent')
 const cheerio = require('cheerio')
 const phantom = require('phantom')
+const charset = require('superagent-charset');
+const superagent = charset(require('superagent'))
 
 function delay(second) {
   return new Promise((resolve) => {
@@ -16,7 +16,7 @@ function delay(second) {
  */
 function getPage(url) {
   return new Promise(function(resolve, reject) {
-    superagent.get(url).end((err, res) => {
+    superagent.get(url).charset('gbk').end((err, res) => {
       if (err) {
         reject(err)
         throw Error(err);
