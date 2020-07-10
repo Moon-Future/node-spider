@@ -18,7 +18,7 @@ async function spider() {
   let $ = await getPage(bsUrl)
   let bsList = $('.fontbox')
   len1 = bsList.length
-  for (let i = 58; i < len1; i++) {
+  for (let i = 150; i < len1; i++) {
     num1 = i
     let bsItem = $(bsList[i])
     let bsHref = bsItem.attr('href')
@@ -31,8 +31,8 @@ async function spiderHz(url) {
   let hzList = $('.fontbox')
   let i = 0
   len2 = hzList.length
-  if (num1 === 58) {
-    i = 47
+  if (num1 === 150) {
+    i = 106
   }
   for (i; i < len2; i++) {
     num2 = i
@@ -48,7 +48,7 @@ async function spiderInfo(url) {
   let chinses = $('.font_22').text()
   let pronunce = $('.font_14').text()
   pronunce = pronunce.replace(/ /g, '').split(',').filter(ele => {
-    return ele !== ''
+    return ele !== '' && isNaN(Number(ele))
   })
   jsonData = {
     c: chinses,
