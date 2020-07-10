@@ -14,16 +14,27 @@ function delay(second) {
  * @param {String} url 要爬取的页面地址
  * @return {Object} 类似 jQuery 对象
  */
-function getPage(url) {
+function getPage(url, encodeing = 'utf-8') {
   return new Promise(function(resolve, reject) {
-    superagent.get(url).charset('gbk').end((err, res) => {
-      if (err) {
-        reject(err)
-        throw Error(err);
-      }
-      let $content = cheerio.load(res.text)
-      resolve($content)
-    })
+    if (encodeing !== 'utf-8') {
+      superagent.get(url).charset('gbk').end((err, res) => {
+        if (err) {
+          reject(err)
+          throw Error(err);
+        }
+        let $content = cheerio.load(res.text)
+        resolve($content)
+      })
+    } else {
+      superagent.get(url).end((err, res) => {
+        if (err) {
+          reject(err)
+          throw Error(err);
+        }
+        let $content = cheerio.load(res.text)
+        resolve($content)
+      })
+    }
   })
 }
 

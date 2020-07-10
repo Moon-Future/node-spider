@@ -4,9 +4,8 @@
  */
 const path = require('path')
 const fs = require('fs')
-const { getPage, gePageDelay } = require('./utils')
-const { get } = require('superagent')
-let len1, num1, len2, num2, len3, num3
+const { getPage, getPageDelay } = require('../utils')
+let len1, num1, len2, num2
 let stroke = 0 // 笔划
 let jsonData = []
 
@@ -15,7 +14,7 @@ let hzUrl = 'http://xh.5156edu.com/' // 部首汉字
 let infoUrl = 'http://xh.5156edu.com' // 汉字详情
 
 async function spider() {
-  let $ = await getPage(bsUrl)
+  let $ = await getPage(bsUrl, 'gbk')
   let bsList = $('.fontbox')
   len1 = bsList.length
   for (let i = 150; i < len1; i++) {
@@ -27,7 +26,7 @@ async function spider() {
 }
 
 async function spiderHz(url) {
-  let $ = await getPage(hzUrl + url)
+  let $ = await getPage(hzUrl + url, 'gbk')
   let hzList = $('.fontbox')
   let i = 0
   len2 = hzList.length
@@ -44,7 +43,7 @@ async function spiderHz(url) {
 }
 
 async function spiderInfo(url) {
-  let $ = await getPage(infoUrl + url)
+  let $ = await getPage(infoUrl + url, 'gbk')
   let chinses = $('.font_22').text()
   let pronunce = $('.font_14').text()
   pronunce = pronunce.replace(/ /g, '').split(',').filter(ele => {
