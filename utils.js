@@ -22,7 +22,8 @@ function getPage(url, encodeing = 'utf-8') {
           reject(err)
           throw Error(err);
         }
-        let $content = cheerio.load(res.text)
+        // let $content = cheerio.load(res.text, {decodeEntities: false})
+        let $content = cheerio.load(res.text, { decodeEntities: false })
         resolve($content)
       })
     } else {
@@ -31,7 +32,7 @@ function getPage(url, encodeing = 'utf-8') {
           reject(err)
           throw Error(err);
         }
-        let $content = cheerio.load(res.text)
+        let $content = cheerio.load(res.text, { decodeEntities: false })
         resolve($content)
       })
     }
