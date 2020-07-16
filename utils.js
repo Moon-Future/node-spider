@@ -1,7 +1,9 @@
 const cheerio = require('cheerio')
 const phantom = require('phantom')
-const charset = require('superagent-charset');
+const charset = require('superagent-charset')
 const superagent = charset(require('superagent'))
+const request = require('request')
+const fs = require('fs')
 
 function delay(second) {
   return new Promise((resolve) => {
@@ -77,8 +79,16 @@ async function getPageDelay(url, second = 1, top = 1000) {
   return cheerio.load(content);
 }
 
+// 下载图片
+function download(url, filePath) {
+  request.head(url, (err, res, body) => {
+    request(url).pipe(fs.createWriteStream(filePath));
+  })
+}
+
 module.exports = {
   getPage,
-  getPageDelay
+  getPageDelay,
+  download
 }
 
