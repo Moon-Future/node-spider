@@ -116,14 +116,19 @@ async function spiderA(url) {
 
 async function getDetailA(url) {
   let $ = await getPage(bastUrl + url)
-  let title = $('.cont').eq(1).find('h1').eq(0).text()
+  let porteyTitle = $('.cont').eq(1).find('h1').eq(0).text()
   let dynasty = $('.cont').eq(1).find('.source a').eq(0).text()
   let author = $('.cont').eq(1).find('.source a').eq(1).text()
   let content = $('.cont').eq(1).find('.contson').html().replace(/<br>/g, '\n').replace(/<p>/g, '').replace(/<\/p>/g, '').trim()
+  if (porteyTitle.indexOf('/') !== -1) {
+    porteyTitle = porteyTitle.replace(/\//g, '^')
+  }
 
   let main = $('.main3 .left')
-  main.find('.sons').eq(0).css('display', 'none')
+  main.find('.sons').eq(0).css('display', 'none').addClass('except-sons')
   main.find('.sonspic').addClass('sons').nextAll().remove()
+  main.find('.title').nextAll().remove()
+  main.find('.title').remove()
   main.find('.yizhu').remove()
   main.find('.tag').remove()
   main.find('.tool').remove()
@@ -157,6 +162,8 @@ async function getDetailA(url) {
   }
 
   main.find('.sonspic').nextAll().remove()
+  main.find('.title').nextAll().remove()
+  main.find('.title').remove()
   main.find('.yizhu').remove()
   main.find('.tag').remove()
   main.find('.tool').remove()
@@ -164,6 +171,14 @@ async function getDetailA(url) {
   main.find('a[title="收起"]').remove()
   main.find('>div:not(.sons)').remove()
   $('.contyishang').eq(1).find('div').eq(0)
+  main.find('.cankao').find('div').css({
+    width: 'initial',
+    float: 'initial'
+  })
+  main.find('.cankao').find('span').css({
+    width: 'initial',
+    float: 'initial'
+  })
 
   aList = main.find('a')
   for (let i = 0; i < aList.length; i++) {
@@ -174,11 +189,24 @@ async function getDetailA(url) {
     } 
   }
 
-  // let a = await getPage('https://so.gushiwen.cn/nocdn/ajaxshangxi.aspx?id=BC945BB88FCBC5C9')
-  // console.log(a('body').html())
+  let sons = main.find('.sons')
+  for (let i = 0; i < sons.length; i++) {
+    let title = sons.eq(i).find('h2').eq(0).find('span').text()
+    if (sons.eq(i).hasClass('except-sons')) {
+      continue
+    }
+    if (sons.eq(i).hasClass('sonspic')) {
+      title = author
+    }
+    sons.eq(i).before(`《《《《《-----${title}-----》》》》》`)
+  }
 
   let html = main.html()
-  fs.writeFileSync(path.join(__dirname, `${title}.html`), html, 'utf-8')
+  fs.writeFileSync(path.join(__dirname, `./poetry/古诗词_${porteyTitle}.html`), html, 'utf-8')
 }
 
-getDetailA('/shiwenv_f5714bcd33e3.aspx')
+// getDetailA('/shiwenv_f5714bcd33e3.aspx')
+
+
+let i = 6;
+spiderA(dataUrl[i].url)
